@@ -1,0 +1,116 @@
+#1 Ubuntu 22.04 via Multipass (I'll mark the terminal commands i used with "!")
+
+1.1) Time settings
+        !   timedatactl status      #Without changes, everything is ok by default (i suspect it uses the host settings or internet connection)
+                Local time: Tue 2023-06-27 18:36:12 +03
+                ......
+                Time zone: Europe/Minsk (+03, +0300)
+                ......
+
+1.2) Locale settings
+        !   sudo dpkg-reconfigure locales       #Locale had changed to en_GB.UTF8
+        !   locale      #result after init 6
+                LANG=en_GB.UTF-8
+                ......
+
+1.3) Custom MOTD
+        !   nano /etc/motd      #New custom motd
+        !   sudo chmod -x /etc/update-motd.d/*      #Just disabled the default info
+
+        !   multipass shell         #It's more realistic than just use cat /etc/motd  :)
+                ################################################################
+                I don't have enough imagination to come up with something cool :)
+                ################################################################
+                Last login: Tue Jun 27 19:42:45 2023 from 192.168.64.1
+
+2) Linux kernel version
+        !   uname -mrs
+                Linux 5.15.0-75-generic x86_64
+
+3) List of kernel modules
+        !   lsmod > Modules.txt
+                Module                  Size  Used by
+                isofs                  53248  0
+                binfmt_misc            24576  1
+                nls_iso8859_1          16384  1
+                ......
+
+4) CPU and memory info
+        !   cat /proc/cpuinfo
+                processor	: 0
+                vendor_id	: GenuineIntel
+                cpu family	: 6
+                model		: 70
+                model name	: Intel(R) Core(TM) i7-4770HQ CPU @ 2.20GHz
+                ......
+
+        !   cat /proc/meminfo
+                MemTotal:         980568 kB
+                MemFree:          263444 kB
+                MemAvailable:     639896 kB
+                Buffers:           15092 kB
+                ......
+
+5) HDD info
+        !   sudo lshw -class disk
+          *-virtio0
+                description: Virtual I/O device
+                physical id: 0
+                bus info: virtio@0
+                logical name: /dev/vda
+                size: 5GiB (5368MB)
+                ......
+
+6) Additional network interface information
+        !   ip a
+                3: enp0s2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+                    link/ether 52:54:00:3d:91:3e brd ff:ff:ff:ff:ff:ff
+                    altname enp0s3
+                    altname ens3
+                    inet 192.168.64.7/24 metric 100 brd 192.168.64.255 scope global dynamic enp0s2
+                       valid_lft 65351sec preferred_lft 65351sec
+                    inet6 fe80::5054:ff:fe3d:913e/64 scope link
+                       valid_lft forever preferred_lft forever
+
+7) Full information about used/unused memory
+        !   free -h 
+                       total        used        free      shared  buff/cache   available
+                Mem:           951Mi       201Mi       128Mi       0.0Ki       622Mi       585Mi
+                Swap:             0B          0B          0B
+
+        !   cat /proc/meminfo
+                MemTotal:         980568 kB
+                MemFree:          263444 kB
+                MemAvailable:     639896 kB
+                Buffers:           15092 kB
+                ......
+
+8) New sudo user with only ssh-key authentication 
+        !   sudo adduser new_admin_user
+        !   sudo usermod -aG sudo new_admin_user
+
+        !   su new_admin_user
+        !   mkdir .ssh          #I had to insert host's public key by myself becouse password authentication was disabled 
+                                by default in Multipass and ssh-copy-id didn't work (i understood that later :) )
+        !   touch authorized_keys       
+        !   tail -2 /etc/ssh/sshd_config        #Changed password access for new_admin_user 
+                Match User new_admin_user
+                        PasswordAuthentication no
+
+9) Ubuntu VM accepteble FS
+        !   cat /proc/filesystems       #The command i used to find the information
+            ......
+            nodev	devpts
+            	ext3
+            	ext2
+            	ext4
+            	squashfs
+            	vfat
+            nodev	ecryptfs
+	        fuseblk
+            ......
+    	        btrfs
+            nodev	autofs
+            nodev	binfmt_misc
+    	        iso9660
+
