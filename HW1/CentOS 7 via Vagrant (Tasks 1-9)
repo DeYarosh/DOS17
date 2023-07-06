@@ -1,4 +1,4 @@
-#2 CentOS via Vagrant (I'll mark the terminal commands i used with "!"))
+#2 CentOS via Vagrant (I'll mark the terminal commands i used with "!")
 
 1.1) Time settings
         !   timedatectl set-timezone Europe/Minsk      
