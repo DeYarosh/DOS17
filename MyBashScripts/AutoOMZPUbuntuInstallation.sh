@@ -20,6 +20,7 @@ old_plugins_string="plugins=(git)"
 new_plugins_string="plugins=(git zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting zsh-autocomplete)"
 
 sed -i 's/$old_plugins_string/$new_plugins_string/' ~/.zshrc
+echo "==== ZSH installation complete! Please restart your shell ===="
 
 exit 0
 
