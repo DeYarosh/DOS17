@@ -4,7 +4,7 @@ set -e  #Stop the script if something goes wrong
 sudo apt install -y zsh     #ZSH installation
 echo "==== Installing of ZSH was successful! =====" 
 
-#chsh -s $(which zsh)    #Set the ZSH as default shell
+chsh -s $(which zsh)    #Set the ZSH as default shell
 echo "==== Now ZSH has become your default shell! ====="
 
 yes | sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" -y  #OhMyZsh installation
