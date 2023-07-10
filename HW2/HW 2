@@ -1,0 +1,19 @@
+6) iostat -x
+    !   man iostat
+    ......
+                  %util  Percentage of elapsed time during which I/O requests were issued to the device 
+                      (bandwidth utilization for the device). 
+                      Device saturation occurs when this value is close to 100% for devices serving requests serially.  
+                      But for devices serving requests in parallel, such as RAID arrays and modern SSDs, 
+                      this number does not reflect their performance limits
+    ......
+    # The developer himself admits that the last column gives incorrect data for devices with multithreading support. 
+    # The utility takes data from /proc/diskstats, but there is a -f flag that allows you to connect other sources of 
+    # statistics if they are compatible. The rest of the flags do not affect the accuracy of the data.
+
+7) chmod -x $(which chmod)
+    !   ls -l /usr/bin/chmod
+        -rw-r--r-- 1 root root 55808 Feb  7  2022 /usr/bin/chmo
+    !   sudo /lib64/ld-linux-x86-64.so.2 /usr/bin/chmod +x /usr/bin/chmod
+    !   ls -l /usr/bin/chmod
+        -rwxr-xr-x 1 root root 55808 Feb  7  2022 /usr/bin/chmod

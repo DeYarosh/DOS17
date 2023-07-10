@@ -1,0 +1,21 @@
+3)  Immortal file
+    !   touch immortalfile
+    !   sudo chattr +i immortalfile
+    !   su -
+    !   cd /home/ubuntu 
+    !   sudo rm immortalfile
+            rm: cannot remove 'immortalfile': Operation not permitted
+
+# 4)  env -i bash -x -l -c 'echo hello_there!' > file.log 2>&1
+
+
+# env -i #starts with an empty environment
+# bash -l        Make bash act as if it had been invoked as a login shell (see
+#                 INVOCATION below).
+# bash -c        If the -c option is present, then commands are read from  the
+#                 first non-option argument command_string.  If there are argu‐
+#                 ments after the command_string, the  first  argument  is  as‐
+#                 signed  to $0 and any remaining arguments are assigned to the
+#                 positional parameters.  The assignment to $0 sets the name of
+#                 the shell, which is used in warning and error messages.
+# bash -x        Print commands and their arguments as they are executed.
