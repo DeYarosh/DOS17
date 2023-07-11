@@ -1,3 +1,47 @@
+Ubuntu 22.04 via Vagrant (I'll mark the terminal commands i used with "!")
+1) Mount /home on a separate partition
+    !   lsblk     #VG ubuntu-vg and LV already existed, so i just added new LV 
+            ......
+            sda                         8:0    0    64G  0 disk
+            ├─sda1                      8:1    0     1M  0 part
+            ├─sda2                      8:2    0     2G  0 part /boot
+            └─sda3                      8:3    0    62G  0 part
+              └─ubuntu--vg-ubuntu--lv 253:0    0    31G  0 lvm  /
+    !   sudo lvcreate -n home -L10G ubuntu-vg
+              Logical volume "home" created.
+    !   sudo mkfs.ext4 -L home /dev/ubuntu-vg/home
+            mke2fs 1.46.5 (30-Dec-2021)
+            ...... 
+            Writing superblocks and filesystem accounting information: done
+    !   sudo mkdir /mnt/target
+    !   sudo mount /dev/ubuntu-vg/home /mnt/target
+    !   sudo cp -a /home/* /mnt/target/
+    !   sudo umount /mnt/target
+    !   tail -1 /etc/fstab
+            /dev/mapper/ubuntu--vg-home /home ext4 defaults 0 0
+    !   lsblk
+            └─sda3                      8:3    0    62G  0 part
+              ├─ubuntu--vg-ubuntu--lv 253:0    0    31G  0 lvm  /
+              └─ubuntu--vg-home       253:1    0    10G  0 lvm  /home
+
+2) Add new user user_with_group with home directory in /var/home/user
+    !   sudo useradd -md /var/home/user user_with_group
+
+3) Create a new user group priv_group, transfer the user user_with_group to it
+    !   sudo groupadd priv_group
+    !   sudo usermod -g priv_group user_with_group
+
+4) Create a directory and grant rights to it to the group of user_with_group
+    !   mkdir HW2.4
+    !   sudo chown root:priv_group HW2.4/
+
+5) Install chrony, allow user_with_group to execute command systemctl restart chronyd
+    !   sudo apt install chrony
+    !   sudo visudo
+    !   sudo tail -2 /etc/sudoers
+            user_with_group ALL=(ALL) NOPASSWD: /bin/systemctl restart chronyd
+            @includedir /etc/sudoers.d 
+
 6) iostat -x
     !   man iostat
     ......
